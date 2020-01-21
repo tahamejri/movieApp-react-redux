@@ -1,19 +1,22 @@
 import StarRatings from "react-star-ratings";
-
+import { Route, NavLink } from 'react-router-dom'
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { editMovie } from "../actions/actionCreators";
+import { editMovie, selected,deleteMovie } from "../actions/actionCreators";
 
 import { SHOW_ALL } from "../actions/actionTypes";
 import { bindActionCreators } from "redux";
 import ModalComponent from "./ModalComponent";
+import MovieDescription from './MovieDescription.js'
+
 
 class MovieCard extends React.Component {
- 
+
 
   render() {
     return (
       <div className="movie-card card">
+        <Route path={`/moviedescription/${this.props.id}`} component={MovieDescription} />
         <img className="card-img-top" src={this.props.image} alt="" />
         <div className="card-body">
           <h4 className="card-title">{this.props.title}</h4>
@@ -28,29 +31,18 @@ class MovieCard extends React.Component {
         <div className="card-footer">
           <div className="clearfix">
             <div className="mt-1">
-              <button id="descriptionButton">Movie Description</button>
+              <NavLink to={`/moviedescription/${this.props.id}`}>
+                <button onClick={  ()=> this.props.selected(this.props)} id="descriptionButton">Movie Description</button>
+              </NavLink>
             </div>
             <div className="card-footer-badge ">
-              {/* <button
-                id="editButton"
-                type="button"
-                className="btn btn-primary"
-                data-toggle="modal"
-                data-target="#exampleModal1"
-                data-whatever="@getbootstrap"
-                onClick={() => console.log(this.props)}
-                // onClick={()=>this.props.editMovie(this.props.id)}
-              >
-                first edit
-              </button> */}
-
-
-
-
+              <NavLink to ="/home/EditMovie">
               <button className="btn btn-primary" data-toggle="modal" data-target="#exampleModal1"
-              onClick={() => this.props.replaceModalItem(this.props.id)}>edit</button>
-              
-             
+                onClick={() => {   this.props.selected(this.props)}
+                }>edit</button>
+                </NavLink>
+
+
               <button
                 onClick={() => {
                   this.props.deleteMovie(this.props.id);
@@ -64,13 +56,13 @@ class MovieCard extends React.Component {
         </div>
       </div>
 
-      
+
     );
   }
 }
 
 const mapStateToProps = state => {
-  return { movies: state.movies };
+  return { movies: state.movies};
   // return {
   //   movies: getVisibleMovies(state.movies, state.visibilityFilter),
   //   visibilityFilter: state.visibilityFilter
@@ -81,7 +73,9 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
       // deleteMovie,
-      editMovie
+      editMovie,
+      selected,
+      deleteMovie
       //setVisibilityFilter
     },
     dispatch

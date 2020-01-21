@@ -81,9 +81,17 @@ body {
 #descriptionButton{
   height: 20%;
 }
-#editButton{
- // width: 30%;
+.moviedesMain{
+  display: flex;
+  flex-direction: column ;
+  flex-wrap: nowrap;
+  width: 80%;
+  border: solid red 5px;
+
 }
-#removeButton{
-  //padding:0%
+.descimage{
+  width: 70%;
+  max-height: 90vh;
+  position: relative;
 }
+

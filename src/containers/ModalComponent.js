@@ -2,26 +2,18 @@ import StarRatings from "react-star-ratings";
 
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { editMovie } from "../actions/actionCreators";
+import { titlehandler,
+  editMovie,
+  descriptionHandler,
+  imageHandler,
+  ratingHandler} from "../actions/actionCreators";
 
 import { SHOW_ALL } from "../actions/actionTypes";
 import { bindActionCreators } from "redux";
+import { Redirect } from "react-router";
+import { NavLink } from "react-router-dom";
 
 class ModalComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-        id: this.props.id,
-
-      title: this.props.title,
-      description: this.props.description,
-      rating: this.props.rating,
-      image: this.props.image,
-     // movies: this.props.movies
-    };
-     console.log(this.state);
-  }
-
   componentWillReceiveProps(nextprops) {
 
     this.setState({
@@ -30,31 +22,35 @@ class ModalComponent extends React.Component {
       description: nextprops.description,
       rating: nextprops.rating,
       image: nextprops.image,
-      movies: nextprops.movies
+      movies: nextprops.movies,
+      item:nextprops.item,
     });
   }
+  constructor(props){
+    super(props)
+    this.state={
+       title:this.props.item.title,
+       image:this.props.item.image,
+       ratting:this.props.item.ratting,
+       description:this.props.item.description
 
-  titleHandler(e) {
-    this.setState({ title: e.target.value });
-}
-descriptionHandler(e) {
-    this.setState({ description: e.target.value });
-}
-imageHandler(e) {
-    this.setState({ image: e.target.value });
-}
-ratingHandler(e) {
-    this.setState({ rating: e.target.value });
-}
+    }
+  }
+
+//   titleHandler(e) {
+//     this.setState({ title: e.target.value });
+// }
+// descriptionHandler(e) {
+//     this.setState({ description: e.target.value });
+// }
+// imageHandler(e) {
+//     this.setState({ image: e.target.value });
+// }
+// ratingHandler(e) {
+//     this.setState({ rating: e.target.value });
+// }
 
 
-edit = () => {
-   
-
-    console.log(this.props.movies);     
-
-    
-  };
   render() {
     return (
       <div className="card-body">
@@ -94,8 +90,8 @@ edit = () => {
                       type="text"
                       className="form-control"
                       id="recipient-name"
-                      value={this.state.title}
-                      onChange={(e) => this.titleHandler(e)}
+                      value={this.props.item.title}
+                      onChange={(e) => this.props.titlehandler(e.target.value)}
                     ></input>
                   </div>
                   <div className="form-group">
@@ -105,8 +101,8 @@ edit = () => {
                     <textarea
                       className="form-control"
                       id="message-text"
-                      value={this.state.description}
-                      onChange={(e) => this.descriptionHandler(e)}
+                      value={this.props.item.description}
+                      onChange={(e) => this.props.descriptionHandler(e)}
                     ></textarea>
                   </div>
                   <div className="form-group">
@@ -117,8 +113,8 @@ edit = () => {
                       type="text"
                       className="form-control"
                       id="recipient-name"
-                      value={this.state.image}
-                      onChange={(e) => this.imageHandler(e)}
+                      value={this.props.item.image}
+                      onChange={(e) => this.props.imageHandler(e)}
                     ></input>
                   </div>
 
@@ -127,8 +123,8 @@ edit = () => {
                       Rating:
                     </label>
                     <StarRatings
-                      rating={this.state.rating}
-                      changeRating={this.changeRating}
+                      rating={this.props.item.rating}
+                      changeRating={this.props.changeRating}
                       starDimension="30px"
                       starSpacing="1px"
                     />
@@ -143,14 +139,17 @@ edit = () => {
                 >
                   Cancel
                 </button>
+                <NavLink to = '/home'>
                 <button
                   type="button"
                   className="btn btn-primary"
-                 onClick={()=>this.props.editMovie(this.state.id,this.state.title,this.state.description,this.state.image, this.state.rating)}
-
+                 onClick={()=>this.props.editMovie(this.props.item.id,this.props.item.title,this.props.item.description,this.props.item.image, this.props.item.rating)
+                   }
+                 //data-dismiss="modal"
                 >
                   Edit movie
                 </button>
+                </NavLink>
               </div>
             </div>
           </div>
@@ -162,14 +161,18 @@ edit = () => {
 
 
 const mapStateToProps = state => {
-    return { movies: state.movies };
+    return { movies: state.movies,
+              item: state.selectedred };
    
   };
   const mapDispatchToProps = dispatch => {
     return bindActionCreators(
       {
-        
-        editMovie
+        titlehandler,
+        editMovie,
+        descriptionHandler,
+        imageHandler,
+        ratingHandler
         
       },
       dispatch
