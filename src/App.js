@@ -4,8 +4,8 @@ import './App.scss';
 import MovieCard from './containers/MovieCard.js'
 import ParentComponent from './containers/ParentComponent.js'
 import {BrowserRouter,Route} from 'react-router-dom'
-import ModalComponent from './containers/ModalComponent';
 import MovieDescription from './containers/MovieDescription';
+
 
 
 function App() {

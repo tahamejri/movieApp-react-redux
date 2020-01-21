@@ -12,12 +12,12 @@ import { bindActionCreators } from "redux";
 import AddComponent from "./AddComponent";
 import ModalComponent from "./ModalComponent";
 import StarRatings from "react-star-ratings";
-import {Route} from 'react-router-dom';
-import MovieDescription from '../containers/MovieDescription.js'
+
+
 
 class ParentComponent extends Component {
   constructor(props) {
-    
+
     super(props);
     this.state = {
       movies: this.props.movies,
@@ -185,3 +185,9 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ParentComponent);
+
+
+
+
+
+

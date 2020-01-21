@@ -2,15 +2,47 @@ import StarRatings from "react-star-ratings";
 import { Route, NavLink } from 'react-router-dom'
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { editMovie, selected,deleteMovie } from "../actions/actionCreators";
+import { editMovie, selected, deleteMovie } from "../actions/actionCreators";
 
 import { SHOW_ALL } from "../actions/actionTypes";
 import { bindActionCreators } from "redux";
 import ModalComponent from "./ModalComponent";
 import MovieDescription from './MovieDescription.js'
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 
 class MovieCard extends React.Component {
+
+  submit = () => {
+    confirmAlert({
+    customUI: ({ onClose }) => {
+      return (
+        <div className='custom-ui'>
+          <h1>Are you sure?</h1>
+          <p>You want to delete this file?</p>
+          <button onClick={onClose}>No</button>
+          <button
+            onClick={() => {
+              this.props.deleteMovie(this.props.id);
+              onClose();
+            }}
+          >
+            Yes, Delete it!
+</button>
+        </div>
+      );
+    }
+  })
+}
+
+
+
+
+
+
+
+
 
 
   render() {
@@ -32,21 +64,19 @@ class MovieCard extends React.Component {
           <div className="clearfix">
             <div className="mt-1">
               <NavLink to={`/moviedescription/${this.props.id}`}>
-                <button onClick={  ()=> this.props.selected(this.props)} id="descriptionButton">Movie Description</button>
+                <button onClick={() => this.props.selected(this.props)} id="descriptionButton">Movie Description</button>
               </NavLink>
             </div>
             <div className="card-footer-badge ">
-              <NavLink to ="/home/EditMovie">
-              <button className="btn btn-primary" data-toggle="modal" data-target="#exampleModal1"
-                onClick={() => {   this.props.selected(this.props)}
-                }>edit</button>
-                </NavLink>
+              <NavLink to="/home/EditMovie">
+                <button className="btn btn-primary" data-toggle="modal" data-target="#exampleModal1"
+                  onClick={() => { this.props.selected(this.props) }
+                  }>edit</button>
+              </NavLink>
 
 
               <button
-                onClick={() => {
-                  this.props.deleteMovie(this.props.id);
-                }}
+                onClick={this.submit}
                 id="removeButton"
               >
                 Remove
@@ -62,12 +92,15 @@ class MovieCard extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return { movies: state.movies};
+  return { movies: state.movies };
   // return {
   //   movies: getVisibleMovies(state.movies, state.visibilityFilter),
   //   visibilityFilter: state.visibilityFilter
   // };
 };
+
+
+
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
@@ -83,3 +116,13 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MovieCard);
+
+
+
+
+
+
+
+
+
+
