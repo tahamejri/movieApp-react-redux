@@ -2,11 +2,13 @@ import StarRatings from "react-star-ratings";
 
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { titlehandler,
+import {
+  titlehandler,
   editMovie,
   descriptionHandler,
   imageHandler,
-  ratingHandler} from "../actions/actionCreators";
+  ratingHandler
+} from "../actions/actionCreators";
 
 import { SHOW_ALL } from "../actions/actionTypes";
 import { bindActionCreators } from "redux";
@@ -14,42 +16,24 @@ import { Redirect } from "react-router";
 import { NavLink } from "react-router-dom";
 
 class ModalComponent extends React.Component {
+ 
   componentWillReceiveProps(nextprops) {
-
     this.setState({
-     id: nextprops.id,
-      title: nextprops.title,
-      description: nextprops.description,
-      rating: nextprops.rating,
-      image: nextprops.image,
-      movies: nextprops.movies,
-      item:nextprops.item,
+      item: nextprops,
+      rating: nextprops.item.rating
     });
   }
-  constructor(props){
-    super(props)
-    this.state={
-       title:this.props.item.title,
-       image:this.props.item.image,
-       ratting:this.props.item.ratting,
-       description:this.props.item.description
 
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      rating: this.props.item.rating
+    };
   }
 
-//   titleHandler(e) {
-//     this.setState({ title: e.target.value });
-// }
-// descriptionHandler(e) {
-//     this.setState({ description: e.target.value });
-// }
-// imageHandler(e) {
-//     this.setState({ image: e.target.value });
-// }
-// ratingHandler(e) {
-//     this.setState({ rating: e.target.value });
-// }
-
+  ratingHandler = x => {
+    this.setState({ rating: x });
+  };
 
   render() {
     return (
@@ -74,8 +58,6 @@ class ModalComponent extends React.Component {
                   className="close"
                   data-dismiss="modal"
                   aria-label="Close"
-
-                  //  this.props.editMovie(this.props.id);
                 >
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -91,7 +73,7 @@ class ModalComponent extends React.Component {
                       className="form-control"
                       id="recipient-name"
                       value={this.props.item.title}
-                      onChange={(e) => this.props.titlehandler(e.target.value)}
+                      onChange={e => this.props.titlehandler(e.target.value)}
                     ></input>
                   </div>
                   <div className="form-group">
@@ -102,7 +84,7 @@ class ModalComponent extends React.Component {
                       className="form-control"
                       id="message-text"
                       value={this.props.item.description}
-                      onChange={(e) => this.props.descriptionHandler(e)}
+                      onChange={e => this.props.descriptionHandler(e)}
                     ></textarea>
                   </div>
                   <div className="form-group">
@@ -114,7 +96,7 @@ class ModalComponent extends React.Component {
                       className="form-control"
                       id="recipient-name"
                       value={this.props.item.image}
-                      onChange={(e) => this.props.imageHandler(e)}
+                      onChange={e => this.props.imageHandler(e)}
                     ></input>
                   </div>
 
@@ -123,32 +105,43 @@ class ModalComponent extends React.Component {
                       Rating:
                     </label>
                     <StarRatings
-                      rating={this.props.item.rating}
-                      changeRating={this.props.changeRating}
-                      starDimension="30px"
+                      rating={this.state.rating}
+                      starDimension="17px"
+                      changeRating={this.ratingHandler}
+                      numberOfStars={10}
                       starSpacing="1px"
                     />
                   </div>
                 </form>
               </div>
               <div className="modal-footer">
+              <NavLink to="/home">
                 <button
                   type="button"
                   className="btn btn-secondary"
                   data-dismiss="modal"
                 >
+                
                   Cancel
                 </button>
-                <NavLink to = '/home'>
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                 onClick={()=>this.props.editMovie(this.props.item.id,this.props.item.title,this.props.item.description,this.props.item.image, this.props.item.rating)
-                   }
-                 //data-dismiss="modal"
-                >
-                  Edit movie
-                </button>
+                </NavLink>
+                <NavLink to="/home">
+                  <button
+                    id="btnEdit"
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={() => {
+                      this.props.editMovie(
+                        this.props.item.id,
+                        this.props.item.title,
+                        this.props.item.description,
+                        this.props.item.image,
+                        this.state.rating
+                      );
+                    }}
+                  >
+                    Edit Movie
+                  </button>
                 </NavLink>
               </div>
             </div>
@@ -159,26 +152,20 @@ class ModalComponent extends React.Component {
   }
 }
 
-
 const mapStateToProps = state => {
-    return { movies: state.movies,
-              item: state.selectedred };
-   
-  };
-  const mapDispatchToProps = dispatch => {
-    return bindActionCreators(
-      {
-        titlehandler,
-        editMovie,
-        descriptionHandler,
-        imageHandler,
-        ratingHandler
-        
-      },
-      dispatch
-    );
-  };
-  
-  export default connect(mapStateToProps, mapDispatchToProps)(ModalComponent);
-  
+  return { movies: state.movies, item: state.selectedred };
+};
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(
+    {
+      titlehandler,
+      editMovie,
+      descriptionHandler,
+      imageHandler,
+      ratingHandler
+    },
+    dispatch
+  );
+};
 
+export default connect(mapStateToProps, mapDispatchToProps)(ModalComponent);

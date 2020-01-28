@@ -12,12 +12,14 @@ import { bindActionCreators } from "redux";
 import AddComponent from "./AddComponent";
 import ModalComponent from "./ModalComponent";
 import StarRatings from "react-star-ratings";
-
-
+import { Route } from "react-router-dom";
+import MovieDescription from "../containers/MovieDescription.js";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import Axios from "axios";
 
 class ParentComponent extends Component {
   constructor(props) {
-
     super(props);
     this.state = {
       movies: this.props.movies,
@@ -31,7 +33,7 @@ class ParentComponent extends Component {
     this.setState({
       requiredItem: index
     });
-    selected(this.state.requiredItem)
+    selected(this.state.requiredItem);
   };
 
   componentWillReceiveProps(nextProps) {
@@ -44,33 +46,32 @@ class ParentComponent extends Component {
 
   onInputChange = event => {
     var _ = require("lodash");
-    if(this.state.inputValue.length!==0){
-    let newMovies = _.filter(this.props.movies, movie =>
-      movie.title.toLowerCase().includes(event.target.value.toLowerCase())
-    );
+    if (this.state.inputValue.length !== 0) {
+      let newMovies = _.filter(this.props.movies, movie =>
+        movie.original_title.toLowerCase().includes(event.target.value.toLowerCase())
+      );
 
-    this.setState({
-      inputValue: event.target.value,
-      movies: newMovies
-    });
-  }
-  else{
-    let newMovies = _.filter(this.props.movies, movie =>
-      movie.rating >=this.state.inputRating
-    );
+      this.setState({
+        inputValue: event.target.value,
+        movies: newMovies
+      });
+    } else {
+      let newMovies = _.filter(
+        this.props.movies,
+        movie => movie.vote_average >= this.state.inputRating
+      );
 
-    this.setState({
-      inputValue: event.target.value,
-      movies: newMovies
-    });
-  }
+      this.setState({
+        inputValue: event.target.value,
+        movies: newMovies
+      });
+    }
   };
 
   updateInputValue = evt => {
     this.setState({
       inputValue: evt.target.value
     });
-    
   };
 
   updatedMovies = array => {
@@ -88,7 +89,7 @@ class ParentComponent extends Component {
   render() {
     const requiredItem = this.state.requiredItem;
     let modalData = this.state.movies[requiredItem];
-    
+
     return (
       <div className="all">
         <div className="inputs">
@@ -117,7 +118,8 @@ class ParentComponent extends Component {
               <StarRatings
                 rating={this.state.inputRating}
                 changeRating={this.changeRatingSearch}
-                starDimension="30px"
+                starDimension="17px"
+                numberOfStars={10}
                 starSpacing="1px"
               />
             </div>
@@ -126,68 +128,41 @@ class ParentComponent extends Component {
 
         <div className="MovieContainer">
           {this.state.movies.map((element, i) => {
-            
-            
             return (
-              
-              
               <MovieCard
-                title={element.title}
-                year={element.year}
-                description={element.description}
-                image={element.image}
+                title={element.original_title}
+                description={element.overview}
+                image={element.poster_path}
+                rating={element.vote_average}
                 key={element.id}
                 id={element.id}
-                rating={element.rating}
                 editMovie={this.props.editMovie}
                 replaceModalItem={this.replaceModalItem}
               />
-              
             );
           })}
-          <ModalComponent/>
-          <AddComponent/>
+
+          <AddComponent />
         </div>
+        <ModalComponent />
       </div>
     );
   }
 }
 
-const getVisibleMovies = (movies, filter) => {
-  switch (filter) {
-    case SHOW_ALL:
-      return movies;
-    // case SHOW_TITLE:
-    //  console.log(movies);
-    // return movies.filter(element => element.title == 'Joker')
-    //return {that.state.inputValue}
-    default:
-      throw new Error("Unknown filter: " + filter);
-  }
-};
-
 const mapStateToProps = state => {
-  return { movies: state.movies,
-    item:state.item  };
- 
+  return { movies: state.movies, item: state.item };
 };
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
       deleteMovie,
-      //editMovie,
-      selected,
-      setVisibilityFilter
+
+      selected
     },
     dispatch
   );
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ParentComponent);
-
-
-
-
-
-

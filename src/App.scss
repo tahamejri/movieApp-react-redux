@@ -3,7 +3,7 @@
 }
 
 .movie-card {
-  margin-left: 100px;
+  margin-left: 60px;
  
   margin-bottom: 30px;
   width: 300px;
@@ -44,13 +44,14 @@ body {
 .MovieContainer {
   display: flex;
   flex-flow: row wrap;
-  padding-left: 100px;
-  float: left;
-  border:solid;
+  //padding-left: 100px;
+  //float: left;
+ 
+ 
 }
 .AddContainer{
-  float: right;
-
+  float: left;
+ 
 }
 
 .logo {
@@ -80,18 +81,23 @@ body {
 
 #descriptionButton{
   height: 20%;
+  margin-bottom: 7%;
 }
-.moviedesMain{
-  display: flex;
-  flex-direction: column ;
-  flex-wrap: nowrap;
-  width: 80%;
-  border: solid red 5px;
-
+#editButton{
+ 
+  background-color:#0069D9;
+  color:white;
+  border-color: #0069D9;
 }
-.descimage{
-  width: 70%;
-  max-height: 90vh;
-  position: relative;
+#removeButton{
+  //padding:0%
+  margin-left: 15%;
 }
 
+.modal-dialog{
+  text-align: left;
+}
+.center{
+  margin-left: 40%;
+  margin-top:10%
+}

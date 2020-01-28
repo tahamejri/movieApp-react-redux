@@ -1,4 +1,13 @@
-import { ADD_MOVIE, REMOVE_MOVIE, EDIT_MOVIE, SELECTED_ITEM_DATA, ON_CHANGE_ITEM, DESCRIPTION_ITEM, IMAGE_ITEM, RATING_ITEM } from '../actions/actionTypes';
+import {
+  ADD_MOVIE,
+  REMOVE_MOVIE,
+  EDIT_MOVIE,
+  SELECTED_ITEM_DATA,
+  ON_CHANGE_ITEM,
+  DESCRIPTION_ITEM,
+  IMAGE_ITEM,
+  RATING_ITEM
+} from "../actions/actionTypes";
 
 const INITIAL_DATA = {
   title: "Joker",
@@ -8,31 +17,27 @@ const INITIAL_DATA = {
   image:
     "https://www.mauvais-genres.com/27765/joker-original-movie-poster-15x20-in-2019-joaquin-phoenix.jpg",
   rating: 2
-}
+};
 
 const selectedred = (state = INITIAL_DATA, action) => {
   switch (action.type) {
-
     case SELECTED_ITEM_DATA:
-      console.log('hello from reducer', action.item)
-      return action.item
+      return action.item;
     case ON_CHANGE_ITEM:
-      return { ...state, title: action.value }
+      return { ...state, title: action.value };
 
     case DESCRIPTION_ITEM:
-      return { ...state, description: action.e.target.value }
+      return { ...state, description: action.e.target.value };
 
     case IMAGE_ITEM:
-      return { ...state, image: action.e.target.value }
-      
-    case RATING_ITEM:
-      return { ...state, ratting: action.e.target.value }
+      return { ...state, image: action.e.target.value };
 
+    case RATING_ITEM:
+      return { ...state, rating: action };
 
     default:
-      return state
-
+      return state;
   }
-}
+};
 
 export default selectedred;
